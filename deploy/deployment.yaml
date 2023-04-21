@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: root-container-checker
+  namespace: root-container-checker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: root-container-checker
+  template:
+    metadata:
+      labels:
+        app: root-container-checker
+    spec:
+      serviceAccountName: root-container-checker-sa
+      containers:
+      - name: root-container-checker
+        image: igoritosousa22/root_container_checker:v2
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /_ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /_healthy
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
