@@ -14,10 +14,10 @@ import (
 )
 
 var (
-	rootContainersCounter = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
+	rootContainersGauge = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
 			Name: "root_container_checker_total",
-			Help: "Total number of containers running as root.",
+			Help: "Current number of containers running as root.",
 		},
 		[]string{"pod", "namespace"},
 	)
@@ -30,7 +30,7 @@ var (
 )
 
 func init() {
-	prometheus.MustRegister(rootContainersCounter)
+	prometheus.MustRegister(rootContainersGauge)
 	prometheus.MustRegister(podHealthGauge)
 }
 
@@ -55,7 +55,7 @@ func checkRootContainers(clientset *kubernetes.Clientset) {
 		}
 
 		if rootContainers > 0 {
-			rootContainersCounter.WithLabelValues(pod.Name, pod.Namespace).Add(float64(rootContainers))
+			rootContainersGauge.WithLabelValues(pod.Name, pod.Namespace).Set(float64(rootContainers))
 		}
 	}
 }
@@ -88,7 +88,7 @@ func main() {
 	}
 
 	// Configura o ticker para executar a verificação a cada 1h
-	ticker := time.NewTicker(3600 * time.Second)
+	ticker := time.NewTicker(60 * time.Second)
 	defer ticker.Stop()
 
 	for {
