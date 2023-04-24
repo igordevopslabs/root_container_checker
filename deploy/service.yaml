@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: root-container-checker
   namespace: root-container-checker
+  labels:
+    app: root-container-checker
 spec:
   selector:
     app: root-container-checker
   ports:
-  - name: http
+  - name: metrics
     port: 8080
     targetPort: 8080
+    protocol: TCP
   type: ClusterIP

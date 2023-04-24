@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: root-container-checker
+  namespace: root-container-checker
+  labels:
+    app: root-container-checker
+spec:
+  endpoints:
+    - port: metrics
+      interval: 60s
+      honorLabels: true
+      path: /metrics
+  selector:
+    matchLabels:
+      app: root-container-checker
+  namespaceSelector:
+    matchNames:
+      - root-container-checker

@@ -56,6 +56,9 @@ func checkRootContainers(clientset *kubernetes.Clientset) {
 
 		if rootContainers > 0 {
 			rootContainersGauge.WithLabelValues(pod.Name, pod.Namespace).Set(float64(rootContainers))
+		} else {
+			// Set the gauge to 0 if there are no root containers in the pod
+			rootContainersGauge.WithLabelValues(pod.Name, pod.Namespace).Set(0)
 		}
 	}
 }
@@ -87,8 +90,8 @@ func main() {
 		panic(err)
 	}
 
-	// Configura o ticker para executar a verificação a cada 1h
-	ticker := time.NewTicker(60 * time.Second)
+	// Configura o ticker para executar a verificação a cada 8h
+	ticker := time.NewTicker(28800 * time.Second)
 	defer ticker.Stop()
 
 	for {

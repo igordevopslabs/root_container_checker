@@ -16,7 +16,7 @@ spec:
       serviceAccountName: root-container-checker-sa
       containers:
       - name: root-container-checker
-        image: igoritosousa22/root_container_checker:v3
+        image: igoritosousa22/root_container_checker:v6
         ports:
         - containerPort: 8080
         readinessProbe:
