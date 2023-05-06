@@ -1,4 +1,4 @@
-name: Security
+name: Security&Tests
 
 on:
   pull_request:
@@ -25,5 +25,10 @@ jobs:
     secrets: inherit
 
   container-scan:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/container-scan-with-cache.yml@main
+    secrets: inherit
+
+  helm-test-deploy:
+    needs: [secret-scanning, security-iac, container-scan]
     uses: igordevopslabs/custom-workflows-actions/.github/workflows/container-scan-with-cache.yml@main
     secrets: inherit
