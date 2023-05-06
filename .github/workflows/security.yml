@@ -31,4 +31,7 @@ jobs:
   helm-test-deploy:
     needs: [secret-scanning, security-iac, container-scan]
     uses: igordevopslabs/custom-workflows-actions/.github/workflows/helmchart-test.yml@main
+    with:
+      application_name: root-container-checker
+      env: demo
     secrets: inherit
