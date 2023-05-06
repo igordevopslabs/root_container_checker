@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "root-container-checker.name" . }}-sa
+  namespace: {{ .Release.Namespace }}
+  labels:
+    helm.sh/chart: {{ include "root-container-checker.chart" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "root-container-checker.name" . }}
+  labels:
+    helm.sh/chart: {{ include "root-container-checker.chart" . }}
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "root-container-checker.name" . }}-sa-binding
+  labels:
+    helm.sh/chart: {{ include "root-container-checker.chart" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "root-container-checker.name" . }}-sa
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "root-container-checker.name" . }}
+  apiGroup: rbac.authorization.k8s.io

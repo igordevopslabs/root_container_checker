@@ -1,0 +1,13 @@
+# Load environment variables before merging
+{{ toYaml .Environment.Values }}
+
+image:
+  registry: docker.io
+  repository: igoritosousa22/root_container_checker
+  tag: v6
+  pullPolicy: Always
+
+extraEnv: {}
+
+podSecurityContext:
+  runAsUser: 1000

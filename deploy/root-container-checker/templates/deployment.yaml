@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "root-container-checker.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    helm.sh/chart: {{ include "root-container-checker.chart" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: root-container-checker
+  template:
+    metadata:
+      labels:
+        app: root-container-checker
+    spec:
+      serviceAccountName: {{ include "root-container-checker.name" . }}-sa
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /_ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /_healthy
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        {{- if .Values.extraEnv }}
+          env:
+            {{ toYaml .Values.extraEnv | nindent 12 }}
+        {{- end }}
+        resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        securityContext:
+          runAsUser: {{ .Values.podSecurityContext.runAsUser }}
