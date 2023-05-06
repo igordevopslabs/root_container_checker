@@ -1,0 +1,23 @@
+---
+helmDefaults:
+  tillerless: true
+  wait: true
+  timeout: 900
+  atomic: true
+  skipDeps: true
+
+releases:
+  - name: root-container-checker
+    chart: ./root-container-checker
+    version: "0.0.1"
+    namespace: root-container-checker
+    values:
+      - values/root-container-checker/values.yaml.gotmpl
+    installed: true
+    labels:                                # Arbitrary key value pairs for filtering releases
+      role: test
+
+environments:
+  demo:
+    values:
+      - values/root-container-checker/DEMO.yaml

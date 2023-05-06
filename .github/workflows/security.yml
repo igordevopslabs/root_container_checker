@@ -1,0 +1,36 @@
+name: Security&Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: security-checks-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  secret-scanning:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/secret-scanning.yml@main
+    secrets: inherit
+
+  security-iac:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/trivy-iac-scan.yml@main
+    secrets: inherit
+
+  container-scan:
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/container-scan-with-cache.yml@main
+    secrets: inherit
+
+  helm-test-deploy:
+    needs: [secret-scanning, security-iac, container-scan]
+    uses: igordevopslabs/custom-workflows-actions/.github/workflows/helmchart-test.yml@main
+    with:
+      application_name: root-container-checker
+      env: demo
+    secrets: inherit

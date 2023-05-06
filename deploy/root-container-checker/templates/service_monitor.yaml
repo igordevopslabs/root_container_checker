@@ -1,8 +1,8 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: root-container-checker
-  namespace: root-container-checker
+  name: {{ include "root-container-checker.name" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: root-container-checker
 spec:

@@ -1,0 +1,11 @@
+replicaCount: 1
+
+service:
+  type: ClusterIP
+
+resources:
+  limits:
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi

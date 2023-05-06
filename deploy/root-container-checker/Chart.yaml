@@ -1,0 +1,12 @@
+apiVersion: v1
+appVersion: 0.0.1
+description: Detection for containers running as a root in cluster
+name: root-container-checker
+version: 0.0.1
+keywords:
+  - monitoring
+  - security
+  - detection
+home: https://github.com/igordevopslabs/root_container_checker
+sources:
+  - https://github.com/igordevopslabs/root_container_checker
