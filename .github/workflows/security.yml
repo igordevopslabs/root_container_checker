@@ -6,7 +6,6 @@ on:
       - main
       - master
 
-
 concurrency:
   group: security-checks-${{ github.head_ref }}
   cancel-in-progress: true
