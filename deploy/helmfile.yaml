@@ -14,6 +14,8 @@ releases:
     values:
       - values/root-container-checker/values.yaml.gotmpl
     installed: true
+    labels:                                # Arbitrary key value pairs for filtering releases
+      role: test
 
 environments:
   demo:
